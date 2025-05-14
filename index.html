@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head><title>Earn Satoshi</title></head>
+  <body>
+    <h1>أربح Satoshi مجانًا</h1>
+    <button onclick="connectWallet()">ربط المحفظة</button>
+    <p id="wallet"></p>
+
+    <script>
+      async function connectWallet() {
+        if (window.satoshi && window.satoshi.isPhantom) {
+          const resp = await window.satoshi.connect();
+          document.getElementById("wallet").innerText = resp.publicKey.toString();
+
+          // أرسل العنوان للخادم
+          await fetch("https://YOUR_BACKEND_URL/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ wallet: resp.publicKey.toString() })
+          });
+        } else {
+          alert("يجب تثبيت محفظة Phantom");
+        }
+      }
+    </script>
+  
+</body></html>
