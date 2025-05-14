@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>اربح Solana</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #2c3e50, #3498db);
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #16a085;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1abc9c;
+    }
+
+    #wallet {
+      margin-top: 20px;
+      font-size: 1.1em;
+      background-color: #ffffff22;
+      padding: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>اربط محفظتك واربح Solana</h1>
+  <button onclick="connectWallet()">ربط المحفظة</button>
+  <p id="wallet">لم يتم ربط أي محفظة بعد</p>
+
+  <script>
+    async function connectWallet() {
+      const wallets = window.solana || window.solflare || window.glow;
+
+      if (wallets && wallets.isPhantom) {
+        try {
+          const res = await wallets.connect();
+          const address = res.publicKey.toString();
+          document.getElementById("wallet").innerText = "محفظتك: " + address;
+
+          await fetch("https://your-api-url/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ wallet: address })
+          });
+
+        } catch (err) {
+          alert("فشل الربط مع المحفظة.");
+        }
+      } else {
+        alert("يرجى تثبيت محفظة Solana مثل Phantom أو Glow او Faucetpay.");
+      }
+    }
+  </script>
+
+</body></html>
